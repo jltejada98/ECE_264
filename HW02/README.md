@@ -85,7 +85,7 @@ your computer for grading.
 ```
 zip sort.zip sort.c
 ```
-
+`
 Enter Blackboard, upload `sort.zip`.
 
 Please copy `sort.zip` to another directory and
