@@ -67,8 +67,8 @@ void eliminate(int n, int k)
   }
 
 
-  // print the last one
-  for(index = 0; index < n; ++index)
+  // print the last one.
+  for(index = 0; index < n; ++index) //Iterate through the array to check the last element. 
   {
     if(arr[index] != -1)
     {
