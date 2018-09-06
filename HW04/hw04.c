@@ -55,13 +55,21 @@ void writeCentroids (const char *filename, Centroid * *centroids, int kval)
   
 #ifdef TEST_DIST
 // distance - funtion to get the distance between present centroid and datapoint
-// @param DataPoint * - pointer to DataPoint structure from which distance needs to be calculated
-// @param Centroid * - pointer to Centroid struct from which distance is being calculated
+// @param DataPoint * - pointer to DataPoint structure from which distance needs to be calculated (DataPoint is a type.)
+// @param Centroid * - pointer to Centroid struct from which distance is being calculated (Centroid is a type.)
 long long int
 distance (const DataPoint * datapoint, const Centroid * centroid)
 {
   // since this is for comparison only, there is no need to call sqrt
   long long int sum = 0;	// must initialize to zero
+  int datapoint_dimension = datapoint->dimension; //Get Dimension from Datapoint and stores the dimension of the datapoint value.
+  long long int difference = 0; //Stores the difference between the datapoint and centroid data.
+
+  for(int index_dimension_dp = 0; index_dimension_dp < datapoint_dimension; ++index_dimension_dp) //Iterates through all datapoint indecies.
+  {
+    difference = datapoint->data[index_dimension_dp] - centroid->data[index_dimension_dp];
+    sum = sum + difference * difference;
+  }
   // find Euclidean distance and then return 'sum' without calling sqrt
 	return sum;
 }
@@ -78,8 +86,24 @@ distance (const DataPoint * datapoint, const Centroid * centroid)
 // centroid from which the distance is smaller than previously seen,
 int closestCentroid (int kval, DataPoint * datapoint, Centroid * *centroids)
 {
-  int mindex; //index of the closest centroid 
+  int mindex = 0; //index of the closest centroid 
   // Please note that return value of distance is long long int, so initialize the values with the same type
+  int centroid_dimension = centroids[0]->dimension; //Stores the Dimension of the Centroid.  
+  int index_dimension_ct = 0; //Stores the index of the centroid array of pointers.
+  long long int current_distance = 0; //Stores the distance from the datapoint to the current centroid being analyzed.
+
+  long long int minimum_distance = distance(datapoint, centroids[index_dimension_ct]);
+
+  for (index_dimension_ct = 1; index_dimension_ct < centroid_dimension; ++centroid_dimension)
+  {
+    current_distance = distance(datapoint, centroids[index_dimension_ct]);
+    if(current_distance < minimum_distance)
+    {
+      minimum_distance = current_distance;
+      mindex = index_dimension_ct;
+    }
+  }
+
   // go through each centroid and find the distance
   // keep track of minimum difference and index of centroid which has the smallest distance
   return mindex;
