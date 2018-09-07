@@ -89,7 +89,6 @@ int closestCentroid (int kval, DataPoint * datapoint, Centroid * *centroids)
 {
   int mindex = 0; //index of the closest centroid 
   // Please note that return value of distance is long long int, so initialize the values with the same type
-  //int centroid_dimension = centroids[0]->dimension; //Stores the Dimension of the Centroid.  
   int index_dimension_ct = 0; //Stores the index of the centroid array of pointers.
   long long int current_distance = 0; //Stores the distance from the datapoint to the current centroid being analyzed.
 
@@ -107,6 +106,7 @@ int closestCentroid (int kval, DataPoint * datapoint, Centroid * *centroids)
       mindex = index_dimension_ct;
     }
   }
+
    return mindex;
 }
 
@@ -123,8 +123,6 @@ int closestCentroid (int kval, DataPoint * datapoint, Centroid * *centroids)
 // return the total distances of datapoints from their centroids
 void kmean (int kval, int nval, DataPoint * *datapoints, Centroid * *centroids)
 {
-	//int centroid_dimension = centroids[0]->dimension; //Stores the Dimension of the Centroid.  
-  //int datapoint_dimension = datapoints[0]->dimension; //Get Dimension from Datapoint and stores the dimension of the datapoint value.
   int index_dimension_ct = 0; //Stores the index of the centroid array of pointers.
   int index_dimension_dp = 0; //Stores the index of the datapoint array of pointers.
   int random_cluster = 0; //Stores the Random cluster that a data point will be assigned.
@@ -146,16 +144,12 @@ void kmean (int kval, int nval, DataPoint * *datapoints, Centroid * *centroids)
     Centroid_addPoint (centroids[random_cluster], datapoints[index_dimension_dp]);
   }
 
-  for (index_dimension_ct = 0; index_dimension_ct < kval; ++index_dimension_ct)
+	// find the centroid for initial random assignment of datapoints
+	for (index_dimension_ct = 0; index_dimension_ct < kval; ++index_dimension_ct)
   {
     Centroid_findCenter(centroids[index_dimension_ct]);
   }
 
-	// find the centroid for initial random assignment of datapoints
-	for (index_dimension_dp = 0; index_dimension_dp < nval; ++index_dimension_dp)
-  {
-    datapoints[index_dimension_dp]->cluster = closestCentroid(kval,datapoints[index_dimension_dp],centroids);
-  }
 	// Now start the loop till convergence is met - (Please see README for understanding kmean algorithm convergence condition)
 	// 
 	// 1. for each data point, find the index of the centroid that is the closest
@@ -168,31 +162,33 @@ void kmean (int kval, int nval, DataPoint * *datapoints, Centroid * *centroids)
     convergence_true = 1;
     for (index_dimension_dp = 0; index_dimension_dp < nval; ++index_dimension_dp)
     {
-
-      current_index = closestCentroid(kval,datapoints[index_dimension_dp],centroids);
-
-      if (datapoints[index_dimension_dp]->cluster != current_index)
-      {
-        convergence_true = 0;
-      }
-
-      datapoints[index_dimension_dp]->cluster = current_index;
-
       for (index_dimension_ct = 0; index_dimension_ct < kval; ++index_dimension_ct)
       {
-        Centroid_reset(centroids[index_dimension_ct]);
-      }
+        current_index = closestCentroid(kval,datapoints[index_dimension_dp],centroids);
 
-      for (index_dimension_dp = 0; index_dimension_dp < nval; ++index_dimension_dp)
-      {
-        Centroid_addPoint (centroids[current_index], datapoints[index_dimension_dp]);
-      }
-
-      for (index_dimension_ct = 0; index_dimension_ct < kval; ++index_dimension_ct)
-      {
-        Centroid_findCenter(centroids[index_dimension_ct]);
+        if (datapoints[index_dimension_dp]->cluster != current_index)
+        {
+          convergence_true = 0;
+          datapoints[index_dimension_dp]->cluster = current_index;
+        }
       }
     }
+
+    for (index_dimension_ct = 0; index_dimension_ct < kval; ++index_dimension_ct)
+    {
+      Centroid_reset(centroids[index_dimension_ct]);
+    }
+
+    for (index_dimension_dp = 0; index_dimension_dp < nval; ++index_dimension_dp)
+    {
+      Centroid_addPoint (centroids[current_index], datapoints[index_dimension_dp]);
+    }
+
+    for (index_dimension_ct = 0; index_dimension_ct < kval; ++index_dimension_ct)
+    {
+      Centroid_findCenter(centroids[index_dimension_ct]);
+    }
+  
   }
 
 }
