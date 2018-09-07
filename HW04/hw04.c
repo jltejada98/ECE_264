@@ -64,8 +64,9 @@ distance (const DataPoint * datapoint, const Centroid * centroid)
   long long int sum = 0;	// must initialize to zero
   int datapoint_dimension = datapoint->dimension; //Get Dimension from Datapoint and stores the dimension of the datapoint value.
   long long int difference = 0; //Stores the difference between the datapoint and centroid data.
+  int index_dimension_dp = 0; //Iterates through all datapoint indecies.
 
-  for(int index_dimension_dp = 0; index_dimension_dp < datapoint_dimension; ++index_dimension_dp) //Iterates through all datapoint indecies.
+  for(index_dimension_dp = 0; index_dimension_dp < datapoint_dimension; ++index_dimension_dp)
   {
     difference = datapoint->data[index_dimension_dp] - centroid->data[index_dimension_dp];
     sum = sum + difference * difference;
@@ -88,13 +89,16 @@ int closestCentroid (int kval, DataPoint * datapoint, Centroid * *centroids)
 {
   int mindex = 0; //index of the closest centroid 
   // Please note that return value of distance is long long int, so initialize the values with the same type
-  int centroid_dimension = centroids[0]->dimension; //Stores the Dimension of the Centroid.  
+  //int centroid_dimension = centroids[0]->dimension; //Stores the Dimension of the Centroid.  
   int index_dimension_ct = 0; //Stores the index of the centroid array of pointers.
   long long int current_distance = 0; //Stores the distance from the datapoint to the current centroid being analyzed.
 
   long long int minimum_distance = distance(datapoint, centroids[index_dimension_ct]);
 
-  for (index_dimension_ct = 1; index_dimension_ct < centroid_dimension; ++centroid_dimension)
+  // go through each centroid and find the distance
+  // keep track of minimum difference and index of centroid which has the smallest distance
+
+  for (index_dimension_ct = 1; index_dimension_ct < kval; ++index_dimension_ct)
   {
     current_distance = distance(datapoint, centroids[index_dimension_ct]);
     if(current_distance < minimum_distance)
@@ -103,15 +107,13 @@ int closestCentroid (int kval, DataPoint * datapoint, Centroid * *centroids)
       mindex = index_dimension_ct;
     }
   }
-
-  // go through each centroid and find the distance
-  // keep track of minimum difference and index of centroid which has the smallest distance
-  return mindex;
+   return mindex;
 }
 
 #endif	
     
 #ifdef TEST_KMEAN
+
 // kmean - function which finds the k clusters in the data set
 // kval - # of clusters
 // nval - # of datapoints
@@ -121,19 +123,78 @@ int closestCentroid (int kval, DataPoint * datapoint, Centroid * *centroids)
 // return the total distances of datapoints from their centroids
 void kmean (int kval, int nval, DataPoint * *datapoints, Centroid * *centroids)
 {
-		// reset all centroids
-		
-		// initialize each data point to a cluster between 0 and kval - 1
+	//int centroid_dimension = centroids[0]->dimension; //Stores the Dimension of the Centroid.  
+  //int datapoint_dimension = datapoints[0]->dimension; //Get Dimension from Datapoint and stores the dimension of the datapoint value.
+  int index_dimension_ct = 0; //Stores the index of the centroid array of pointers.
+  int index_dimension_dp = 0; //Stores the index of the datapoint array of pointers.
+  int random_cluster = 0; //Stores the Random cluster that a data point will be assigned.
+  int current_index = 0; //Stores the index of the current distance from a datapoint to a centroid.
+  int convergence_true = 0; //Stores a value of 1 when the convergence condition is met.
 
-		// find the centroid for initial random assignment of datapoints
-		
-		// Now start the loop till convergence is met - (Please see README for understanding kmean algorithm convergence condition)
-		// 
-		// 1. for each data point, find the index of the centroid that is the closest
-		// 2. store that index in DataPoint's structure's cluster value.
-		// 3. reset all the centroids
-		// 4. go through each datapoint again and add this datapoint to its centroid using Centroid_addPoint function
-		// 5. find the new centroid for each cluster by calling Centroid_findCenter 
+
+  // reset all centroids
+  for (index_dimension_ct = 0; index_dimension_ct < kval; ++index_dimension_ct)
+  {
+    Centroid_reset(centroids[index_dimension_ct]);
+  }
+
+	// initialize each data point to a cluster between 0 and kval - 1
+  for (index_dimension_dp = 0; index_dimension_dp < nval; ++index_dimension_dp)
+  {
+    random_cluster = (rand() % kval);
+    datapoints[index_dimension_dp]->cluster = random_cluster;
+    Centroid_addPoint (centroids[random_cluster], datapoints[index_dimension_dp]);
+  }
+
+  for (index_dimension_ct = 0; index_dimension_ct < kval; ++index_dimension_ct)
+  {
+    Centroid_findCenter(centroids[index_dimension_ct]);
+  }
+
+	// find the centroid for initial random assignment of datapoints
+	for (index_dimension_dp = 0; index_dimension_dp < nval; ++index_dimension_dp)
+  {
+    datapoints[index_dimension_dp]->cluster = closestCentroid(kval,datapoints[index_dimension_dp],centroids);
+  }
+	// Now start the loop till convergence is met - (Please see README for understanding kmean algorithm convergence condition)
+	// 
+	// 1. for each data point, find the index of the centroid that is the closest
+	// 2. store that index in DataPoint's structure's cluster value.
+	// 3. reset all the centroids
+	// 4. go through each datapoint again and add this datapoint to its centroid using Centroid_addPoint function
+	// 5. find the new centroid for each cluster by calling Centroid_findCenter 
+  while(convergence_true == 0)
+  {
+    convergence_true = 1;
+    for (index_dimension_dp = 0; index_dimension_dp < nval; ++index_dimension_dp)
+    {
+
+      current_index = closestCentroid(kval,datapoints[index_dimension_dp],centroids);
+
+      if (datapoints[index_dimension_dp]->cluster != current_index)
+      {
+        convergence_true = 0;
+      }
+
+      datapoints[index_dimension_dp]->cluster = current_index;
+
+      for (index_dimension_ct = 0; index_dimension_ct < kval; ++index_dimension_ct)
+      {
+        Centroid_reset(centroids[index_dimension_ct]);
+      }
+
+      for (index_dimension_dp = 0; index_dimension_dp < nval; ++index_dimension_dp)
+      {
+        Centroid_addPoint (centroids[current_index], datapoints[index_dimension_dp]);
+      }
+
+      for (index_dimension_ct = 0; index_dimension_ct < kval; ++index_dimension_ct)
+      {
+        Centroid_findCenter(centroids[index_dimension_ct]);
+      }
+    }
+  }
+
 }
  
 #endif	
