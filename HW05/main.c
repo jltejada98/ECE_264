@@ -21,10 +21,10 @@ void printArray(int * arr, int size)
 
 
 //============================ONLY EDIT BELOW THIS COMMENT============================//
-//#ifdef TEST_COMP
+#ifdef TEST_COMP
 int comparator(const void *a, const void *b) 
 { 
-    //type cast both the parameters to the type const int*) a: 
+  //type cast both the parameters to the type const int*) a: 
 	//FOR EXAMPLE: const int* ia = (const int *) a;
 	const int *constant_a = (const int *)a; //Cast to type const int*)
 	const int *constant_b = (const int *)b; //Cast to type const int*)
@@ -49,8 +49,7 @@ int comparator(const void *a, const void *b)
 
   return return_value;
 } 
-
-//#endif
+#endif
 
 
 #ifdef TEST_COUNT
@@ -66,6 +65,7 @@ int countFromFile(char* file_name)
   while(!feof(file_pointer))
   {
     ++count;
+    printf("%d\n",count);
   }
   // at the end of the loop close file_pointer
   fclose(file_pointer);
@@ -132,6 +132,8 @@ int main(int argc, char * * argv)
 
   // call the printArray() function provided to you.
   printArray(array, number_elements);
+
+  fclose(file_pointer);
 
   return EXIT_SUCCESS;
 }
