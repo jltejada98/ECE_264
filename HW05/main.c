@@ -21,7 +21,7 @@ void printArray(int * arr, int size)
 
 
 //============================ONLY EDIT BELOW THIS COMMENT============================//
-#ifdef TEST_COMP
+//#ifdef TEST_COMP
 int comparator(const void *a, const void *b) 
 { 
   //type cast both the parameters to the type const int*) a: 
@@ -34,22 +34,22 @@ int comparator(const void *a, const void *b)
   //if parameter2 == parameter1; return 0
   //if parameter2 < parameter1; return 1
 
-	if (constant_b > constant_a)
+	if (*constant_b > *constant_a)
 	{
-		return_value =  -1;
+		return_value = -1;
 	}
-  else if (constant_b == constant_a)
+  else if (*constant_b == *constant_a)
   {
-    return_value =  0;
+    return_value = 0;
   }
-  else if (constant_b < constant_a)
+  else if (*constant_b < *constant_a)
   {
-    return_value =  1;
+    return_value = 1;
   }
 
   return return_value;
 } 
-#endif
+//#endif
 
 
 #ifdef TEST_COUNT
@@ -62,10 +62,10 @@ int countFromFile(char* file_name)
   file_pointer = fopen(file_name, "r");
 
   // count the number of integers using a loop
-  while(!feof(file_pointer))
+  int value;
+  while(fscanf(file_pointer, "%d", &value) == 1)
   {
     ++count;
-    printf("%d\n",count);
   }
   // at the end of the loop close file_pointer
   fclose(file_pointer);
@@ -84,7 +84,7 @@ void fillArray(int* arr, int count, char* file_name)
 
   //How to read the file?
 	// run a loop, from index = 0 to "count", and use: fscanf(file_pointer, "%d", &arr[index]);
-  for (file_index = 0; file_index < count; ++file_index)
+  for (file_index = 0; file_index < count; ++file_index) 
   {
     fscanf(file_pointer, "%d", &arr[file_index]);
   }
@@ -95,7 +95,7 @@ void fillArray(int* arr, int count, char* file_name)
 }
 #endif
 
-#ifdef TEST_MAIN
+//#ifdef TEST_MAIN
 int main(int argc, char * * argv)
 {
   FILE *file_pointer; //Pointer to file header.
@@ -124,11 +124,12 @@ int main(int argc, char * * argv)
   {
     return EXIT_FAILURE;
   }
+
   // call the fillArray(arr, count, file_name); and store the values from the file in the array.
   fillArray(array,number_elements,file_name);
   
   // Use qsort() function, after defining the comparator() function - "qsort (arr, count, sizeof(int), comparator);"
-  qsort(array, number_elements, sizeof(int),comparator);
+  qsort(array, number_elements, sizeof(int), comparator); //Not Sorting
 
   // call the printArray() function provided to you.
   printArray(array, number_elements);
@@ -137,5 +138,5 @@ int main(int argc, char * * argv)
 
   return EXIT_SUCCESS;
 }
-#endif
+//#endif
 
