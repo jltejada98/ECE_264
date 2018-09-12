@@ -21,7 +21,7 @@ void printArray(int * arr, int size)
 
 
 //============================ONLY EDIT BELOW THIS COMMENT============================//
-//#ifdef TEST_COMP
+#ifdef TEST_COMP
 int comparator(const void *a, const void *b) 
 { 
   //type cast both the parameters to the type const int*) a: 
@@ -49,7 +49,7 @@ int comparator(const void *a, const void *b)
 
   return return_value;
 } 
-//#endif
+#endif
 
 
 #ifdef TEST_COUNT
@@ -95,7 +95,7 @@ void fillArray(int* arr, int count, char* file_name)
 }
 #endif
 
-//#ifdef TEST_MAIN
+#ifdef TEST_MAIN
 int main(int argc, char * * argv)
 {
   FILE *file_pointer; //Pointer to file header.
@@ -138,5 +138,5 @@ int main(int argc, char * * argv)
 
   return EXIT_SUCCESS;
 }
-//#endif
+#endif
 
