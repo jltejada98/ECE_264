@@ -135,6 +135,7 @@ int main(int argc, char * * argv)
   printArray(array, number_elements);
 
   fclose(file_pointer);
+  free(array);
 
   return EXIT_SUCCESS;
 }
