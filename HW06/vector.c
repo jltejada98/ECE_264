@@ -46,9 +46,9 @@ int numberOfElements(char* in_file_name)
   //Check for fopen failure
   if (file_pointer == NULL)
   {
-    printf("fopen Failure numberOfElements\n");
     return EXIT_FAILURE;
   }
+
   //use fseek(file_pointer, 0, SEEK_END); to point to the end of the file.
   fseek(file_pointer,0,SEEK_END);
 
@@ -59,6 +59,8 @@ int numberOfElements(char* in_file_name)
   float numelem = file_size / sizeof(Vector);
 
   //return numelem; to send the number of elements back to main().
+  fclose(file_pointer);
+
   return numelem;
 }
 #endif
@@ -71,13 +73,14 @@ void fillVector(Vector* vector, int count, char * in_file_name)
 
   if (file_pointer == NULL)
   {
-    printf("fopen Failure fillVector\n");
     return;
   }
 
   //How to read the file?
   //use fread(vector, sizeof(Vector), count, file_pointer)
   fread(vector, sizeof(Vector), count, file_pointer);
+
+  fclose(file_pointer);
 
   return;
 }
@@ -91,13 +94,14 @@ void writeFile(Vector* vector, int count, char* out_file_name)
 
   if (file_pointer == NULL)
   {
-    printf("fopen Failure writeFile\n");
     return;
   }
 
   //How to write to the file?
   //use fwrite(vector, sizeof(Vector), count, file_pointer)
   fwrite(vector, sizeof(Vector), count, file_pointer);
+
+  fclose(file_pointer);
 
   return;
 }
