@@ -17,6 +17,8 @@ hw06: $(OBJS)
 	
 testmemory: $(TARGET)
 	$(VAL) ./hw06 inputs/test1.bin output1.bin
+	$(VAL) ./hw06 inputs/test2.bin output2.bin
+	$(VAL) ./hw06 inputs/test3.bin output3.bin
 # Test memory leaks for all inputs and outputs
 
 .c.o: 
@@ -24,14 +26,18 @@ testmemory: $(TARGET)
 
 test1: hw06
 	./hw06 inputs/test1.bin output1.bin
+	diff output1.bin expected/expected1.bin
 	#run diff between output1.bin and expected/expected1.bin
 
 test2: hw06
 	./hw06 inputs/test2.bin output2.bin
+	diff output2.bin expected/expected2.bin
 	#run diff between output2.bin and expected/expected2.bin
 
 test3: hw06
 	./hw06 inputs/test3.bin output3.bin
+	diff output3.bin expected/expected3.bin
 	#run diff between output3.bin and expected/expected3.bin
 
 clean: # remove all machine generated files
+	rm -f main *.o *.out *gcda *gcno *gcov #Taken from HW01
