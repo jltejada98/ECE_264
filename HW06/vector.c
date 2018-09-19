@@ -79,6 +79,7 @@ void fillVector(Vector* vector, int count, char * in_file_name)
   //use fread(vector, sizeof(Vector), count, file_pointer)
   fread(vector, sizeof(Vector), count, file_pointer);
 
+  return;
 }
 #endif
 
@@ -98,5 +99,6 @@ void writeFile(Vector* vector, int count, char* out_file_name)
   //use fwrite(vector, sizeof(Vector), count, file_pointer)
   fwrite(vector, sizeof(Vector), count, file_pointer);
 
+  return;
 }
 #endif

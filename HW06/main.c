@@ -30,26 +30,23 @@ int main(int argc, char * * argv)
 
   // allocate memory to store the numbers (initialize an array of structures)
   // check for malloc fail, if so, "return EXIT_FAILURE;"
-  int *input_array = malloc(number_elements *  sizeof(int));
-  int *output_array = malloc(number_elements * sizeof(int));
+  Vector *input_vector = malloc(number_elements *  sizeof(int));
 
-  if (input_array == NULL)
+  if (input_vector == NULL)
   {
     return EXIT_FAILURE;
   }
-  if (output_array == NULL)
-  {
-    return EXIT_FAILURE;
-  }
-  
-  //call the fillVector(vector, count, in_file); and store the values from the file in the array of strucures.
 
+  //call the fillVector(vector, count, in_file); and store the values from the file in the array of structures.
+  fillVector(input_vector,number_elements,input_file_name);
 
   //Use qsort() function, after defining the comparator() function.
   //ENSURE THE COMPARATOR FUNCTION IS USED TO SORT THE ARRAY OF STRUCTURES W.R.T. THE STRUCTURE VARIABLE "x".
-
+  qsort(input_vector,number_elements,sizeof(int),cmp);  
 
   //call the writeFile(vector,count, out_file); to save the sorted vector into the file.
+  writeFile(input_vector, number_elements, output_file_name);
+
   return EXIT_SUCCESS;
   }
 //#endif  //REMEMBER TO REMOVE COMMENTS TO IFDEF STATEMENTS BEFORE SUBMITTING
