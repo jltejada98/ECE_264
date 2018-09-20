@@ -40,23 +40,9 @@ int main(int argc, char * * argv)
   //call the fillVector(vector, count, in_file); and store the values from the file in the array of structures.
   fillVector(input_vector,number_elements,input_file_name);
 
-  // printf("Unordered:\n");
-
-  // for (int i = 0; i < number_elements; ++i)
-  // {
-  //   printf("%d %d %d\n",input_vector[i].x,input_vector[i].y,input_vector[i].z);
-  // }
-
   //Use qsort() function, after defining the comparator() function.
   //ENSURE THE COMPARATOR FUNCTION IS USED TO SORT THE ARRAY OF STRUCTURES W.R.T. THE STRUCTURE VARIABLE "x".
   qsort(input_vector,number_elements,sizeof(Vector),cmp);  
-
-  // printf("Ordered:\n");
-
-  // for (int i = 0; i < number_elements; ++i)
-  // {
-  //   printf("%d %d %d\n",input_vector[i].x,input_vector[i].y,input_vector[i].z);
-  // }
 
   //call the writeFile(vector,count, out_file); to save the sorted vector into the file.
   writeFile(input_vector, number_elements, output_file_name);
@@ -65,4 +51,5 @@ int main(int argc, char * * argv)
 
   return EXIT_SUCCESS;
   }
+  
 #endif
