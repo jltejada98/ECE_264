@@ -42,27 +42,56 @@ void merge(int arr[], int l, int m, int r)
   //WRITE YOUR CODE BELOW THIS 
 
   //Initialize variables
-  int index_L = l; //Stores index of array L
-  int index_R = r; //Stores index of array R
+  int index_L = 0; //Stores index of array L
+  int index_R = 0; //Stores index of array R
   
   //1.Copy data to temp arrays L[] and R[] from arr[]
-  for (index_L = l; index_L < n1; ++index_L) //Copies Data to L[] from arr[]
+  for (index_L = l; index_L <= m; ++index_L) //Copies Data to L[] from arr[]
   {
-    L[index_L] = arr[l + index_L];
+    L[index_L - l] = arr[index_L];
   }
 
-  for (index_R = r; index_R < n2; ++index_R) //Copies Data to R[] from arr[]
+  for (index_R = m + 1; index_R <= r; ++index_R) //Copies Data to R[] from arr[]
   {
-    R[index_R] = arr[r + index_R];
+    R[index_R - m - 1] = arr[index_R];
   }
 
-  //2. Merge the temp arrays back into arr[l..r]
+  // Compare Elements
+  index_L = 0;
+  index_R = 0;
+  int index = l;
+
+  while ((index_L < n1) && (index_R < n2))
+  {
+    if (L[index_L] >= R[index_R]) //2. Merge the temp arrays back into arr[l..r]
+    {
+      arr[index] = R[index_R];  
+      ++index;
+      ++index_R;
+    }
+    if (L[index_L] < R[index_R])
+    {
+      arr[index] = L[index_L];
+      ++index;
+      ++index_L;
+    }
+  }
 
   //3. Copy the remaining elements of L[], check if there are any 
-
-  //4. Copy the remaining elements of R[], check if there are any 
-
+  for (int i = index_L; i < n1; ++i)
+  {
+    arr[index] = L[i];
+    ++index;
+  }
   
+  //4. Copy the remaining elements of R[], check if there are any 
+  for (int i = index_R; i < n2; ++i)
+  {
+    arr[index] = R[i];
+    ++index;
+  }
+  free(L);
+  free(R);
 
   return;
  //DO not modify below this line until specified in comments
@@ -89,7 +118,7 @@ void mergeSort(int arr[], int l, int r)
   //1. SET CONDITION for RECURSION
   if (l < r)
   {
-    m = (l+r)/2;
+    m = l+(r-l)/2;
     mergeSort(arr,l,m); //2. Sort first half arr[l..m]
     mergeSort(arr,m+1, r); //3. Sort second half arr[m+1..r]
     merge(arr,l,m,r); //4. Use the merge() function to arrange in order
@@ -152,10 +181,10 @@ int main(int argc, char * * argv)
   // modify here between ifdef and endif
   // do not modify anywhere else in this function
   // call mergesort function and provide the correct arguments (Hint: array, start index, end index)
-  mergeSort(arr,0,count);
+  mergeSort(arr,0,count - 1);
   #endif
 
-  int i;
+  // int i;
    /* open the file for writing*/
   FILE * fp = fopen(argv[2], "w"); 
   if (fp == NULL)

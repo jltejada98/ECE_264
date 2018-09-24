@@ -12,13 +12,16 @@ TESTFALGS = -DTEST_MERGE -DTEST_MERGESORT -DTEST_MERGESSORT
 SRCS = main.c
 OBJS = $(SRCS:%.c=%.o)
 
-hw06: $(OBJS) 
-	$(GCC) $(TESTFALGS) $(OBJS) -o hw06
+hw07: $(OBJS) 
+	$(GCC) $(TESTFALGS) $(OBJS) -o hw07
+
+#Added Rule to test all files
+testall: test1 test2 test3
 	
 testmemory: $(TARGET)# Test memory leaks for all inputs and outputs
-	$(VAL) --log-file=memcheck1.txt ./hw06 input/Test1 output1
-	$(VAL) --log-file=memcheck2.txt ./hw06 input/Test2 output2
-	$(VAL) --log-file=memcheck3.txt ./hw06 input/Test3 output3
+	$(VAL) --log-file=memcheck1.txt ./hw07 input/Test1 output1
+	$(VAL) --log-file=memcheck2.txt ./hw07 input/Test2 output2
+	$(VAL) --log-file=memcheck3.txt ./hw07 input/Test3 output3
 
 .c.o: 
 	$(GCC) $(TESTFALGS) -c $*.c 
@@ -36,4 +39,4 @@ test3: hw07 #run diff between output3.bin and expected/expected3.bin
 	diff output3 expected/expected3
 	 
 clean: # remove all machine generated files (Check for output file extension)
-	rm -f hw07 *.o ouput? memcheck?.txt 
+	rm -f hw07 *.o memcheck?.txt output?
