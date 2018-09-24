@@ -57,22 +57,22 @@ void merge(int arr[], int l, int m, int r)
   }
 
   // Compare Elements
-  index_L = 0;
+  index_L = 0; //Reset Values of L/R indexes. 
   index_R = 0;
-  int index = l;
+  int index_arr = l; //Stores index of arr.
 
-  while ((index_L < n1) && (index_R < n2))
+  while ((index_L < n1) && (index_R < n2)) //Orders elements of L/R arrays until either index has reached end of array.
   {
     if (L[index_L] >= R[index_R]) //2. Merge the temp arrays back into arr[l..r]
     {
-      arr[index] = R[index_R];  
-      ++index;
+      arr[index_arr] = R[index_R];  
+      ++index_arr;
       ++index_R;
     }
     if (L[index_L] < R[index_R])
     {
-      arr[index] = L[index_L];
-      ++index;
+      arr[index_arr] = L[index_L];
+      ++index_arr;
       ++index_L;
     }
   }
@@ -80,15 +80,15 @@ void merge(int arr[], int l, int m, int r)
   //3. Copy the remaining elements of L[], check if there are any 
   for (int i = index_L; i < n1; ++i)
   {
-    arr[index] = L[i];
-    ++index;
+    arr[index_arr] = L[i];
+    ++index_arr;
   }
   
   //4. Copy the remaining elements of R[], check if there are any 
   for (int i = index_R; i < n2; ++i)
   {
-    arr[index] = R[i];
-    ++index;
+    arr[index_arr] = R[i];
+    ++index_arr;
   }
   free(L);
   free(R);
