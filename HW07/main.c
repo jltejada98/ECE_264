@@ -69,7 +69,7 @@ void merge(int arr[], int l, int m, int r)
       ++index_arr;
       ++index_R;
     }
-    if (L[index_L] < R[index_R])
+    else if (L[index_L] < R[index_R])
     {
       arr[index_arr] = L[index_L];
       ++index_arr;
