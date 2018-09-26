@@ -43,4 +43,4 @@ test4: hw07 #run diff between output4 and expected/expected4
 	diff Output4 Expected/Expected4
 
 clean: # remove all machine generated files (Check for output file extension)
-	rm -f hw07 *.o memcheck?.txt output?
+	rm -f hw07 *.o memcheck?.txt Output?
