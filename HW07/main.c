@@ -90,6 +90,7 @@ void merge(int arr[], int l, int m, int r)
     arr[index_arr] = R[i];
     ++index_arr;
   }
+  
   free(L);
   free(R);
 
