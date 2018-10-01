@@ -5,7 +5,7 @@ WARNING = -Wall -Wshadow --pedantic
 ERROR = -Wvla -Werror
 GCC = gcc -std=c99 -g $(WARNING) $(ERROR)
 
-TESTFLAGS = -DTEST_MAIN -DTEST_SHUF -DTEST_INTER -DTEST_DIV
+TESTFLAGS = -DTEST_MAIN -DTEST_SHUF -DTEST_RECURSIVESHUFFLE -DTEST_INTER -DTEST_DIV
 
 SRCS =  main.c utility.c shuffle.c
 
@@ -38,4 +38,4 @@ test3: shuf
 	diff output3 expected/expected3
 
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -f $(OBJS) $(TARGET) output?

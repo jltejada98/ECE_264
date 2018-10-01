@@ -6,6 +6,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+//Function Definitions
+void recursive_shuffle(CardDeck, CardDeck , CardDeck, int, int);
+
 #ifdef TEST_DIV
 void divide(CardDeck orig_deck, CardDeck * upper_deck, CardDeck * lower_deck)
 {
@@ -35,6 +38,20 @@ void divide(CardDeck orig_deck, CardDeck * upper_deck, CardDeck * lower_deck)
 void interleave(CardDeck upper_deck, CardDeck lower_deck)
 {
   // Follow instructions in the README, to understand the working of the recursive function.
+  //Create Shuffled deck to hold each shuffled permutation.
+  CardDeck shuffled_deck[MAX_SIZE];
+  
+  for (int index = 0; index < MAX_SIZE; ++index)
+  {
+    shuffled_deck->cards[index] = 0;
+  }
+  shuffled_deck->size = MAX_SIZE;
+
+  //Indecies for upper and lower decks.
+  int upper_deck_index = 0;
+  int lower_deck_index = 0;
+
+  recursive_shuffle(upper_deck, lower_deck, *shuffled_deck, lower_deck_index, upper_deck_index);
 
   // Use print_deck(…) to print each resulting order.
   // Tip: There should be no uncertainty in this function.
@@ -42,6 +59,48 @@ void interleave(CardDeck upper_deck, CardDeck lower_deck)
   // Tip: To copy the elements of one array from one array to another (e.g., the array of cards in a CardDeck),
       //you could use memcpy(…).
       //The = operator will simply copy the address, not the elements themselves.
+}
+#endif
+
+#ifdef TEST_RECURSIVESHUFFLE
+void recursive_shuffle(CardDeck upper_deck, CardDeck lower_deck, CardDeck shuffled_deck, int lower_deck_index, int upper_deck_index)
+{
+  //Terminating condition 
+  if((lower_deck_index >= lower_deck.size) || (upper_deck_index >= upper_deck.size))
+  {
+    
+    if (lower_deck_index >= lower_deck.size)
+    {
+      for (int i = upper_deck_index; i < upper_deck.size; ++i)
+      {
+        shuffled_deck.cards[lower_deck_index + i] = upper_deck.cards[i];
+      }
+    }
+    else
+    {
+      for (int i = lower_deck_index; i < lower_deck.size; ++i)
+      {
+        shuffled_deck.cards[upper_deck_index + i] = lower_deck.cards[i];
+      }
+    }
+
+    print_deck(shuffled_deck);
+    return;
+  }
+
+  if (lower_deck_index < lower_deck.size)
+  {
+    shuffled_deck.cards[lower_deck_index + upper_deck_index] = lower_deck.cards[lower_deck_index];
+    recursive_shuffle(upper_deck, lower_deck, shuffled_deck, lower_deck_index + 1, upper_deck_index); 
+  }
+
+  if (upper_deck_index < upper_deck.size)
+  {
+    shuffled_deck.cards[lower_deck_index + upper_deck_index] = lower_deck.cards[upper_deck_index];
+    recursive_shuffle(upper_deck, lower_deck, shuffled_deck, lower_deck_index, upper_deck_index + 1);
+  }
+
+  return;
 }
 #endif
 
@@ -70,6 +129,7 @@ void shuffle(CardDeck orig_deck)
 
 	// call divideDeck to fill upper_deck and lower_deck
   divide(orig_deck, upper_deck, lower_deck);
+
 
 	//run a loop through all the pairs
   for (int i = 0; i < numpairs; ++i)
