@@ -49,6 +49,9 @@ void interleave(CardDeck upper_deck, CardDeck lower_deck, int repeat)
         //you could use memcpy(…).
         //The = operator will simply copy the address, not the elements themselves.
 
+  //In Interleave Helper Function, use shuffled deck, upper deck and lower deck, with respective Indecies as arguments (Three card Decks, and Three Indecies).
+  //Remember to Free files.
+  //Remember modified code.
 }
 #endif
 
