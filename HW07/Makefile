@@ -7,7 +7,7 @@ ERROR = -Wvla -Werror
 GCC = gcc -std=c99 -g $(WARNING) $(ERROR) 
 VAL = valgrind --tool=memcheck --leak-check=full --verbose
 
-TESTFALGS = -DTEST_MERGE -DTEST_MERGESORT -DTEST_MERGESSORT
+TESTFALGS = -DTEST_MERGE -DTEST_MERGESORT -DTEST_MERGESSORT -DTEST_RECURSIVESHUFFLE
 
 SRCS = main.c
 OBJS = $(SRCS:%.c=%.o)

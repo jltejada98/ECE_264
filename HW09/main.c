@@ -33,15 +33,15 @@ int main(int argc, char ** argv)
   memcpy(orig_deck.cards, deck, orig_deck.size*sizeof(orig_deck.cards[0]));
 
 
-	// Read the number of cards from the terminal input
+  // Read the number of cards from the terminal input
   // For example
   //int size = strtol(...);
   //int shuff = strtol(...);
   int shuff = strtol(argv[2], NULL, 10); //Number of times to shuffle cards.
 
 
-	//call repeat_shuffle(orig_deck, shuff);
+  //call repeat_shuffle(orig_deck, shuff);
   repeat_shuffle(orig_deck, shuff);
-	return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }
 #endif
