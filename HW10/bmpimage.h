@@ -40,12 +40,7 @@ typedef struct {
 	unsigned char * data;
 } BMPImage;
 
-
-
-
 BMPImage *BMP_Open(const char *filename);
-
-
 
 // Check the validity of the header with the file from which the header is read
 //
