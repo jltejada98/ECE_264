@@ -87,9 +87,9 @@ BMPImage * AdaptiveThresholding(BMPImage * grayImage, int radius, int epsilon){
 	int pixel_outer_loop = 0;
   int pixel_inner_loop = 0;
 	//Run a nested loop for all elements using height and width
-  for (int row = 0; row < (adaptive->header).height; row += 3)
+  for (int row = 0; row < (adaptive->header).height; row += 1)
   {
-    for (int col = 0; col < (adaptive->header).width; col +=3)
+    for (int col = 0; col < (adaptive->header).width; col +=1)
     {
       //Find the maximum of top row, b)ottom rpw, left column and right column using radius
       int toprow = MAX(0, row-radius);
@@ -103,10 +103,10 @@ BMPImage * AdaptiveThresholding(BMPImage * grayImage, int radius, int epsilon){
       int average_epsilon = 0; //Holds average value of neighborhood pixels.
 
       //Run loop from toprow to bottom row
-      for (int row2 = toprow; row2 < bottomrow; row2 +=3) //Increment by 3 or 1?
+      for (int row2 = toprow; row2 <= bottomrow; row2 +=1)
       {
         //Inside which run a loop from left column to right column
-        for (int col2 = leftcol; col2 < rightcol; col2 +=3)
+        for (int col2 = leftcol; col2 <= rightcol; col2 +=1)
         {
           //calculate the location of each pixel using (row2*width + col2)*3;
           pixel_inner_loop = (row2*(adaptive->header).width + col2)*3; 
@@ -125,15 +125,15 @@ BMPImage * AdaptiveThresholding(BMPImage * grayImage, int radius, int epsilon){
       if (grayImage->data[pixel_outer_loop] < (average_epsilon - epsilon))
       {
         //then assign adaptive thresholding image data as 0(black) for data value at pixel, pixel+1, pixel+2
-        grayImage->data[pixel_outer_loop + 2] = 0;
-        grayImage->data[pixel_outer_loop + 1] = 0;
-        grayImage->data[pixel_outer_loop] = 0;
+        adaptive->data[pixel_outer_loop + 2] = 0;
+        adaptive->data[pixel_outer_loop + 1] = 0;
+        adaptive->data[pixel_outer_loop] = 0;
       }
       else // else if average is lower then color shall be white(255) for data value at pixel, pixel+1, pixel+
       {
-        grayImage->data[pixel_outer_loop + 2] = 255;
-        grayImage->data[pixel_outer_loop + 1] = 255;
-        grayImage->data[pixel_outer_loop] = 255;
+        adaptive->data[pixel_outer_loop + 2] = 255;
+        adaptive->data[pixel_outer_loop + 1] = 255;
+        adaptive->data[pixel_outer_loop] = 255;
       }
     }
   }
