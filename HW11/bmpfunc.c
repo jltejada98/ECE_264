@@ -84,8 +84,8 @@ BMPImage * AdaptiveThresholding(BMPImage * grayImage, int radius, int epsilon){
 		return NULL;
 	}
 
-	int pixel_outer_loop = 0;
-  int pixel_inner_loop = 0;
+	int pixel_outer_location = 0;
+  int pixel_inner_location = 0;
 	//Run a nested loop for all elements using height and width
   for (int row = 0; row < (adaptive->header).height; row += 1)
   {
@@ -109,9 +109,9 @@ BMPImage * AdaptiveThresholding(BMPImage * grayImage, int radius, int epsilon){
         for (int col2 = leftcol; col2 <= rightcol; col2 +=1)
         {
           //calculate the location of each pixel using (row2*width + col2)*3;
-          pixel_inner_loop = (row2*(adaptive->header).width + col2)*3; 
+          pixel_inner_location = (row2*(adaptive->header).width + col2)*3; 
           //add all data values at every location point in data.
-          sum_neighborhood += grayImage->data[pixel_inner_loop];
+          sum_neighborhood += grayImage->data[pixel_inner_location];
           //keep a counter for averaging
           ++counter_neighborhood;
         }
@@ -121,20 +121,20 @@ BMPImage * AdaptiveThresholding(BMPImage * grayImage, int radius, int epsilon){
       //calculate average (using int)
       average_epsilon = sum_neighborhood / counter_neighborhood;
       //check if average_epsilon is greater than grayImage->data[at that pixel point]
-      pixel_outer_loop = (row*(adaptive->header).width + col);
-      if (grayImage->data[pixel_outer_loop] < (average_epsilon - epsilon))
+      if (grayImage->data[pixel_outer_location] < (average_epsilon - epsilon))
       {
         //then assign adaptive thresholding image data as 0(black) for data value at pixel, pixel+1, pixel+2
-        adaptive->data[pixel_outer_loop + 2] = 0;
-        adaptive->data[pixel_outer_loop + 1] = 0;
-        adaptive->data[pixel_outer_loop] = 0;
+        adaptive->data[pixel_outer_location + 2] = 0;
+        adaptive->data[pixel_outer_location + 1] = 0;
+        adaptive->data[pixel_outer_location] = 0;
       }
       else // else if average is lower then color shall be white(255) for data value at pixel, pixel+1, pixel+
       {
-        adaptive->data[pixel_outer_loop + 2] = 255;
-        adaptive->data[pixel_outer_loop + 1] = 255;
-        adaptive->data[pixel_outer_loop] = 255;
+        adaptive->data[pixel_outer_location + 2] = 255;
+        adaptive->data[pixel_outer_location+ 1] = 255;
+        adaptive->data[pixel_outer_location] = 255;
       }
+      pixel_outer_location+=3;
     }
   }
           
