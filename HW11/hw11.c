@@ -1,5 +1,6 @@
 #include "hw10.h"
 //Modify this file
+
 //#ifdef TEST_MAIN
 
 int main(int argc, char **argv){
@@ -32,10 +33,10 @@ int main(int argc, char **argv){
   }
 
   // open the BMP file
-   BMPImage *original_image = BMP_Open(input_file_name);
+  BMPImage *original_image = BMP_Open(input_file_name);
 
   // convert to gray scale
-   BMPImage *gray_image = ImgToGray(original_image);
+  BMPImage *gray_image = ImgToGray(original_image);
 
 	// check for error in converting to gray scale
    if (gray_image == NULL)
@@ -43,11 +44,26 @@ int main(int argc, char **argv){
     return EXIT_FAILURE;
   }  
 
-
   // call adaptive threshold function
+  BMPImage *adapted_image = AdaptiveThresholding(gray_image, radius, epsilon); //Check for Error.s
+
   // check for errors after calling adaptive threshold
+   if (adapted_image == NULL)
+  {
+    return EXIT_FAILURE;
+  } 
+
 	// write the adaptive threshold image to file
-	// free all the images
+  BMP_Write(output_file_name,adapted_image);
+
+  // free all the images
+  BMP_Free(original_image);
+  BMP_Free(gray_image);
+  BMP_Free(adapted_image);
+
+
+  fclose(input_file_pointer); 
+
 	return EXIT_SUCCESS;
 }
 
