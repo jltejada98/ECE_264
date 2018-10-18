@@ -109,7 +109,7 @@ BMPImage * AdaptiveThresholding(BMPImage * grayImage, int radius, int epsilon){
         for (int col2 = leftcol; col2 < rightcol; col2 +=3)
         {
           //calculate the location of each pixel using (row2*width + col2)*3;
-          pixel_inner_loop = (row2*(adaptive->header).width + col2); 
+          pixel_inner_loop = (row2*(adaptive->header).width + col2)*3; 
           //add all data values at every location point in data.
           sum_neighborhood += grayImage->data[pixel_inner_loop];
           //keep a counter for averaging
