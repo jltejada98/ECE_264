@@ -36,8 +36,18 @@ void LinkedListPrint(Node * head)
 Node * CreateNode(int value)
 {
 	// allocate memory for the new Node*
+  Node *new_node = NULL;
+  new_node = malloc(sizeof(Node));
+
 	// check memory allocation fails
-	// create a Node* with the value as 'value'(input argument).
+  if (new_node == NULL)
+  {
+    return NULL;
+  }
+  new_node->value = value;
+  new_node->next = NULL;
+
+  return new_node;
 }
 #endif
 
@@ -51,8 +61,25 @@ Node * CreateNode(int value)
 void LinkedListCreate(Node * * head, int length)
 {
 	// check if length is not negative
-	// create linked list of length as 'length'
-	// do not return anything
+	if (length <= 0) //Check if < or <=
+  {
+    return;
+  }
+
+  // create linked list of length as 'length'
+
+  Node *temp = *head; //Temporary array to seek the end of linked list.
+
+  for (int linked_index = 1; linked_index < length; ++linked_index) //Creates the appropriate nodes.
+  {
+    while((temp->next) != NULL) //Goes to End of Linked List (Should we reset head to )
+    {
+      temp = temp->next;
+    }
+    temp->next = CreateNode(linked_index); //Inserts new node at the end of list.
+  }
+  LinkedListPrint(*head);
+  return; // do not return anything
 }
 #endif
 
@@ -71,9 +98,18 @@ void LinkedListCreate(Node * * head, int length)
 void Josephus(Node ** head, int k, int elemDivisible)
 {
 	// implement the algorithm here
+  // int number_eliminated = 0; //Counts the number of eliminated elements
+  // int counter = 1; //Counts up to k elements in the array.
+  // int index = 0; //Counts number of eliminated elements.
+
+  // while(number_eliminated < elemDivisible)
+  // {
+    
+  // }
+
 	// remember to free the memory of the nodes
 	// print the linked list using our function when number of nodes remaining is divisible by elemDivisible
-
+  return;
 }
 
 #endif
