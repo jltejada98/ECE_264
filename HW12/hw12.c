@@ -68,17 +68,17 @@ void LinkedListCreate(Node * * head, int length)
 
   // create linked list of length as 'length'
 
-  Node *temp = *head; //Temporary array to seek the end of linked list.
+  Node *temp_node = *head; //Temporary array to seek the end of linked list.
 
   for (int linked_index = 1; linked_index < length; ++linked_index) //Creates the appropriate nodes.
   {
-    while((temp->next) != NULL) //Goes to End of Linked List (Should we reset head to )
+    while((temp_node->next) != NULL) //Goes to End of Linked List (Should we reset head to )
     {
-      temp = temp->next;
+      temp_node = temp_node->next;
     }
-    temp->next = CreateNode(linked_index); //Inserts new node at the end of list.
+    temp_node->next = CreateNode(linked_index); //Inserts new node at the end of list.
   }
-  LinkedListPrint(*head);
+
   return; // do not return anything
 }
 #endif
@@ -98,17 +98,71 @@ void LinkedListCreate(Node * * head, int length)
 void Josephus(Node ** head, int k, int elemDivisible)
 {
 	// implement the algorithm here
-  // int number_eliminated = 0; //Counts the number of eliminated elements
-  // int counter = 1; //Counts up to k elements in the array.
-  // int index = 0; //Counts number of eliminated elements.
+  int number_remaining = 0; //Counts the number of eliminated elements
+  int counter = 0; //Counts up to k elements in the array.
+  Node *temp_node_current = *head; //Points to the previous of the currently counted element.
+  Node *temp_node_previous = *head; //Points to the currently counted element.
 
-  // while(number_eliminated < elemDivisible)
-  // {
-    
-  // }
+  //Determine length of linked list to then determine how many elements are alive.
+  int linked_list_length = 1;
+  while((temp_node_previous->next) != NULL) //Goes to End of Linked List (Should we reset head to )
+  {
+    temp_node_previous = temp_node_previous->next;
+    ++linked_list_length;
+  }
 
-	// remember to free the memory of the nodes
-	// print the linked list using our function when number of nodes remaining is divisible by elemDivisible
+  number_remaining = linked_list_length;
+
+  //Continues to eliminate elements as long as the number remaining is less than elemDivisble.
+  while(number_remaining > 1)
+  {
+    while(counter < k)
+    {
+      if (temp_node_previous->next == NULL)
+      {
+        temp_node_previous = *head;
+        temp_node_current = temp_node_previous->next;
+      }
+      else if (temp_node_current->next == NULL)
+      {
+        
+        temp_node_previous = temp_node_current;
+        temp_node_current = *head;
+      }
+      else
+      {
+        temp_node_previous = temp_node_previous->next;
+        temp_node_current = temp_node_current->next;
+      }
+      ++counter;
+    }
+
+    //Deletion Process
+    if (temp_node_current->value == (*head)->value)
+    {
+      *head = temp_node_current->next;
+      free(temp_node_current); // remember to free the memory of the nodes
+      temp_node_current = *head;
+      --number_remaining;
+      counter = 0;
+    }
+    else
+    {
+      temp_node_previous->next = temp_node_current->next;
+      free(temp_node_current); // remember to free the memory of the nodes
+      temp_node_current = temp_node_previous->next;
+      --number_remaining;
+      counter = 0;
+    }
+
+    if (!(number_remaining % elemDivisible))
+    {
+      LinkedListPrint(*head);
+    }
+  }
+  
+	
+	
   return;
 }
 

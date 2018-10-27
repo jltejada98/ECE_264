@@ -20,9 +20,9 @@ testmemory: $(TARGET)
 	$(VALGRIND)=./valgrind1.log ./hw12 10 3 1 > output1
 	$(VALGRIND)=./valgrind2.log ./hw12 10 4 2 > output2
 	$(VALGRIND)=./valgrind3.log ./hw12 8 5 3 > output3
-	$(VALGRIND)=./valgrind3.log ./hw12 8 9 1 > output3
-	$(VALGRIND)=./valgrind3.log ./hw12 41 3 1 > output3
-	$(VALGRIND)=./valgrind3.log ./hw12 100 3 20 > output3
+	$(VALGRIND)=./valgrind4.log ./hw12 8 9 1 > output4
+	$(VALGRIND)=./valgrind5.log ./hw12 41 3 1 > output5
+	$(VALGRIND)=./valgrind6.log ./hw12 100 3 20 > output6
 
 #Added rule to test all files.
 testall: test1 test2 test3 test4 test5 test6
