@@ -36,8 +36,20 @@ Node * CreateNode(int val)
 {
 	// Define a new variable of type Node
 	// Initialize "next", and "value" appropriately 
-	
-	//return the newNode
+  //Extracted from HW12
+  // allocate memory for the new Node*
+  Node *new_node = NULL;
+  new_node = malloc(sizeof(Node));
+
+  // check memory allocation fails
+  if (new_node == NULL)
+  {
+    return NULL;
+  }
+  new_node->value = val;
+  new_node->next = NULL;
+
+  return new_node;  //return the newNode
 }
 #endif
 
@@ -51,6 +63,27 @@ Node * CreateNode(int val)
 void LinkedListCreate(Node * * source, int len, int* arr)
 {
 	// This function is similar to the one in HW12.
+  //Extracted from HW12
+  // check if length is not negative
+  if (len <= 0) //Check if < or <=
+  {
+    return;
+  }
+
+  // create linked list of length as 'length'
+
+  Node *temp_node = *source; //Temporary array to seek the end of linked list.
+
+  for (int linked_index = 1; linked_index < len; ++linked_index) //Creates the appropriate nodes.
+  {
+    while((temp_node->next) != NULL) //Goes to End of Linked List (Should we reset head to )
+    {
+      temp_node = temp_node->next;
+    }
+    temp_node->next = CreateNode(arr[linked_index]); //Inserts new node at the end of list.
+  }
+
+  return; // do not return anything
 	// Tip: use CreateNode(arr[index])
 }
 #endif
@@ -60,7 +93,7 @@ void LinkedListCreate(Node * * source, int len, int* arr)
 // source is the Node corresponding to the head of the list
 // head1 is the list corresponding upper half of the list. (After Partition)
 // head2 is the list corresponding lower half of the list. (After Partition)
-void SpiltList(Node* source, Node** head1, Node** head2) 
+void SplitList(Node* source, Node** head1, Node** head2) 
 { 
 	// Find the mid point of the list.
 	
@@ -79,24 +112,39 @@ void SpiltList(Node* source, Node** head1, Node** head2)
 #endif
 
 
-#ifdef TEST_DIV
+//#ifdef TEST_DIV
 void Divide(Node** source) 
 { 
 	// Declare a node, to hold the current head of source list.
-	
+	Node *current_head = *source;
+
 	// Declare nodes, to hold the two the heads of the two sub-lists.
+  Node * head_1 = NULL;
+  head_1 = malloc(sizeof(Node));
+  if (head_1 == NULL)  //Check Memory allocation failure
+  {
+    return;
+  }
   
-	// Check for the base case -- length 0 or 1
-		// if so, return;
+  Node * head_2 = NULL;
+  head_1 = malloc(sizeof(Node));
+  if (head_1 == NULL)  //Check Memory allocation failure
+  {
+    return;
+  }
+
+
+  
+	// Check for the base case -- length 0 or 1 if so, return;
 	  
 	// Use SpiltList(...) to partition the list into sub lists.
 
 	// Use LinkedListPrint(...); to print the upper sub-list.
 	// Use LinkedListPrint(...); to print the lower sub-list
-		// DO NOT USE YOUR OWN PRINT FUNCTION.
+	// DO NOT USE YOUR OWN PRINT FUNCTION.
 	
-	 // Recursively Divide(...) both sub-lists, to find their respective mid-points
-	 // till only one or no elements are left in the sub-lists.
+	// Recursively Divide(...) both sub-lists, to find their respective mid-points
+	// till only one or no elements are left in the sub-lists.
 } 
 #endif
 
