@@ -7,7 +7,7 @@
 /****************** DO NOT Modify this file above this line *************************/
 
 // Modify the following function
-//#ifdef TEST_MAIN
+#ifdef TEST_MAIN
 
 int main(int argc, char **argv)
 {
@@ -86,7 +86,6 @@ int main(int argc, char **argv)
 		// Then the sub-lists are broken down further into smaller sub-lists.
 		// Refer to the example in the README
   Divide(&head_node);
-
 
 	// Tip: check for memory errors.
   free(head_node);
