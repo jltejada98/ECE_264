@@ -153,14 +153,13 @@ void Divide(Node** source)
     temp_node = temp_node->next;
     ++length_source;
   }
-  
+
 	// Check for the base case -- length 0 or 1 if so, return;
   if (length_source < 1)
   {
-    free(current_head);
     return;
   }
-	  
+
   // Declare nodes, to hold the two the heads of the two sub-lists.
   Node *head1 = NULL;
   head1 = malloc(sizeof(Node));
@@ -175,7 +174,7 @@ void Divide(Node** source)
   {
     return;
   }
-
+  
     
 	// Use SpiltList(...) to partition the list into sub lists.
   SplitList(current_head, &head1, &head2);
@@ -189,7 +188,6 @@ void Divide(Node** source)
   Divide(&head1);
   Divide(&head2);
 	// till only one or no elements are left in the sub-lists.
-
   return;
 } 
 #endif
