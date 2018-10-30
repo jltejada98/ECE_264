@@ -17,10 +17,10 @@ $(TARGET): $(OBJS)
 	$(CC) $(TESTFLAGS) -c $*.c
 
 testmemory: $(TARGET)
-	$(VALGRIND)=./valgrind1.log ./$(TARGET)  > output1
-	$(VALGRIND)=./valgrind2.log ./$(TARGET)  > output2
-	$(VALGRIND)=./valgrind3.log ./$(TARGET)  > output3
-	$(VALGRIND)=./valgrind4.log ./$(TARGET)  > output4
+	$(VALGRIND)=./valgrind1.log ./$(TARGET) inputs/test1.txt  > output1
+	$(VALGRIND)=./valgrind2.log ./$(TARGET) inputs/test2.txt > output2
+	$(VALGRIND)=./valgrind3.log ./$(TARGET) inputs/test3.txt > output3
+	$(VALGRIND)=./valgrind4.log ./$(TARGET) inputs/test4.txt > output4
 
 #Added rule to test all files.
 testall: test1 test2 test3 test4

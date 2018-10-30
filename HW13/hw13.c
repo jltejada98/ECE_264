@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "hw13.h"
+#include <math.h>
 
 #ifdef LINKEDLIST
 // Do not modify this function, we are using this within ifdef block for
@@ -89,7 +90,7 @@ void LinkedListCreate(Node * * source, int len, int* arr)
 #endif
 
 
-//#ifdef TEST_SPLIT
+#ifdef TEST_SPLIT
 // source is the Node corresponding to the head of the list
 // head1 is the list corresponding upper half of the list. (After Partition)
 // head2 is the list corresponding lower half of the list. (After Partition)
@@ -104,37 +105,32 @@ void SplitList(Node* source, Node** head1, Node** head2)
     ++length_source;
   }
 
-  int mid_point = (length_source + 1)/2;
+  int mid_point = 0;
 
+  if (!(length_source % 2))
+  {
+    mid_point = floor(length_source/2);
+  }
+  else
+  {
+    mid_point = length_source/2;
+  }
   //in case of an even number of nodes, mid point will be floor(<num_elements>/2)
   //Example: 1,2,3,4
   // The list should split into 1,2 and 3,4
   //in case of an odd number of nodes, mid point will be <num_elements>/2
   //Example: 1,2,3,4,5
-  // The list should split into 1,2,3 and 4,5
-  *temp_node_1 = *source;
+  // The list should split into 1,2,3 and 4,5.
+  temp_node_1 = source;
+  *head1 = source;
 
-  for (int i = 0; i < (mid_point-1); ++i)
+  for (int i = 0; i < (mid_point); ++i)
   {
-    (*head1)->value = temp_node_1->value;
     temp_node_1 = temp_node_1->next;
-    (*head1) = (*head1)->next;
   }
 
-  (*head1)->next = NULL;
-  Node *temp_node_2 = (temp_node_1)->next;
-  free(temp_node_1);
-
-  for (int i = mid_point; i < length_source; ++i)
-  {
-    (*head2)->value = temp_node_2->value;
-    temp_node_2 = temp_node_2->next;
-    (*head2) = (*head2)->next;
-  }
-
-  (*head2)->next = NULL;
-  free(temp_node_2);
-
+  *head2 = temp_node_1->next;
+  temp_node_1->next = NULL;
 	// Tip: head1 will point to the source node.
 	// Tip: head2 will point to the mid-point of the list.
 	// Tip: Ensure you break the link between the sub-lists.
@@ -150,21 +146,6 @@ void Divide(Node** source)
 	// Declare a node, to hold the current head of source list.
 	Node *current_head = *source;
 
-	// Declare nodes, to hold the two the heads of the two sub-lists.
-  Node * head1 = NULL;
-  head1 = malloc(sizeof(Node));
-  if (head1 == NULL)  //Check Memory allocation failure
-  {
-    return;
-  }
-  
-  Node * head2 = NULL;
-  head2 = malloc(sizeof(Node));
-  if (head2 == NULL)  //Check Memory allocation failure
-  {
-    return;
-  }
-
   int length_source = 0;
   Node *temp_node = *source;
   while((temp_node->next) != NULL) //Goes to End of Linked List (Should we reset head to )
@@ -174,11 +155,28 @@ void Divide(Node** source)
   }
   
 	// Check for the base case -- length 0 or 1 if so, return;
-  if (length_source <= 1)
+  if (length_source < 1)
   {
+    free(current_head);
     return;
   }
 	  
+  // Declare nodes, to hold the two the heads of the two sub-lists.
+  Node *head1 = NULL;
+  head1 = malloc(sizeof(Node));
+  if (head1 == NULL)  //Check Memory allocation failure
+  {
+    return;
+  }
+  
+  Node *head2 = NULL;
+  head2 = malloc(sizeof(Node));
+  if (head2 == NULL)  //Check Memory allocation failure
+  {
+    return;
+  }
+
+    
 	// Use SpiltList(...) to partition the list into sub lists.
   SplitList(current_head, &head1, &head2);
 	// Use LinkedListPrint(...); to print the upper sub-list.
@@ -191,9 +189,6 @@ void Divide(Node** source)
   Divide(&head1);
   Divide(&head2);
 	// till only one or no elements are left in the sub-lists.
-  free(head1);
-  free(head2);
-
 
   return;
 } 

@@ -88,7 +88,7 @@ int main(int argc, char **argv)
   Divide(&head_node);
 
 	// Tip: check for memory errors.
-  free(head_node);
+  // free(head_node);
 	return EXIT_SUCCESS;
 }
 
