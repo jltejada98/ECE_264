@@ -43,12 +43,12 @@ treeNode* search(treeNode * tn, int value)
   treeNode *L = search(tn->leftChild,value);
   if ((L != NULL) && (L->value == value))
   {
-    return tn;
+    return L;
   }
   treeNode *R = search(tn->rightChild,value);
   if ((R != NULL) && (R->value == value))
   {
-    return tn;
+    return R;
   }
   
   return NULL;
@@ -66,6 +66,18 @@ treeNode* search(treeNode * tn, int value)
 bool isSubTree(treeNode* haystack, treeNode *needle)
 {
   //Terminating conditions
+  if (needle == NULL)
+  {
+    return true;
+  }
+  else if (haystack == NULL)
+  {
+    return false;
+  }
+  else if (haystack->value != needle->value)
+  {
+    return false;
+  }
 
   //Otherwise continue searching.
   bool L = true;
@@ -74,6 +86,7 @@ bool isSubTree(treeNode* haystack, treeNode *needle)
   L = isSubTree(haystack->leftChild, needle->leftChild);
   R = isSubTree(haystack->rightChild, needle->rightChild);
 
+  return(L&R);
 }
 #endif
 
