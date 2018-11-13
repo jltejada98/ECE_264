@@ -11,7 +11,16 @@
 
 void FreeBinaryTree(treeNode *root)
 {
+  if(root == NULL)
+  {
+    return;
+  }
+  FreeBinaryTree(root->leftChild);
+  FreeBinaryTree(root->rightChild);
 
+  free(root);
+
+  return;
 }
 
 #endif
@@ -21,9 +30,29 @@ void FreeBinaryTree(treeNode *root)
 // and returns the node which has that value
 treeNode* search(treeNode * tn, int value)
 {
-
+  //Check if the tree node is NULL.
+  if (tn == NULL)
+  {
+    return NULL;
+  }
+  
+  if (tn->value == value)
+  {
+    return tn;
+  }
+  treeNode *L = search(tn->leftChild,value);
+  if ((L != NULL) && (L->value == value))
+  {
+    return tn;
+  }
+  treeNode *R = search(tn->rightChild,value);
+  if ((R != NULL) && (R->value == value))
+  {
+    return tn;
+  }
+  
+  return NULL;
 }
-
 #endif
 
 
@@ -36,6 +65,14 @@ treeNode* search(treeNode * tn, int value)
 */
 bool isSubTree(treeNode* haystack, treeNode *needle)
 {
+  //Terminating conditions
+
+  //Otherwise continue searching.
+  bool L = true;
+  bool R = true;
+
+  L = isSubTree(haystack->leftChild, needle->leftChild);
+  R = isSubTree(haystack->rightChild, needle->rightChild);
 
 }
 #endif
@@ -51,8 +88,14 @@ bool isSubTree(treeNode* haystack, treeNode *needle)
 // "strstr(const char \*haystack, const char \*needle)"
 bool isContained(treeNode * haystack, treeNode * needle)
 {
+  //First Determine if Needle Root is somewhere in haystack.
+  treeNode *search_needle_root = search(haystack, needle->value);
+  if (search_needle_root == NULL)
+  {
+    return false;
+  }
 
+  //Otherwise, mutually search trees so that their values match.
+  return(isSubTree(search_needle_root, needle));
 }
-
-
 #endif
