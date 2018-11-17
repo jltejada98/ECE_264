@@ -54,27 +54,51 @@ void BinaryTreePostOrderPrint(treeNode *tn)
 ///***** MODIFY THIS FUNCTION ******/////
 //this function calculates the distance of a node from the root, given the tree, the value to search.
 #endif
+
 #ifdef TEST_DIST
 int FindDistance(treeNode* t, int search_query, int distance)
 {
+  // This function recursively checks for the value of search_query in the tree. 
+  // Use the properties of binary search tree in order to search for the search_query.
+  // if a match is found, return distance.
+  // if not, recursively call, either the left child or the right child, search_query and distance+1 as arguments.
+  // if the value 'search_query' does not exist in the tree, return -1.
+ 
+  //Terminating condition
+  if (t == NULL)
+  {
+    return -1;
+  }
 
-	/*
-	 * This function recursively checks for the value of search_query in the tree. 
-	 * Use the properties of binary search tree in order to search for the search_query.
-	 * if a match is found, return distance.
-	 * if not, recursively call, either the left child or the right child, search_query and distance+1 as arguments.
-	 * if the value 'search_query' does not exist in the tree, return -1.
-	 *
-	 */
+  //Recursive Calls
+  if(search_query == (t->value))
+  {
+    return distance;
+  }
 
+  if (search_query < (t->value))
+  {
+    distance = FindDistance(t->leftChild, search_query, (distance + 1));
+  }
+
+  if (search_query > (t->value))
+  {
+    distance = FindDistance(t->rightChild, search_query, (distance + 1));
+  }
+
+  return distance;
 }
 #endif
 ///***** MODIFY THIS FUNCTION ******/////
 // this function creates a bst based on the given array
 #ifdef TEST_CREATEBST
+
+//Helper Function Declarations;
+treeNode * _helperCreateBST(treeNode *, int);
+treeNode * _helperNode(treeNode *tn, int value);
+
 treeNode* CreateBST(int* a,int root, int start, int end)
 {
-
 	/*
 	 *
 	 * Create a node, allocate memort and assign the value of root to it.
@@ -86,8 +110,62 @@ treeNode* CreateBST(int* a,int root, int start, int end)
 	 * if start and end point to the same element in the array, then it is a leaf node. Assign the values of 
 	 *   its children accordingly.
 	 *
-	 *//////
-	 
-	 
+	 */
+  treeNode *root_node = malloc(sizeof(treeNode));
+  root_node->value = root;
+  root_node->leftChild = NULL;
+  root_node->rightChild = NULL;
+
+  for (int index = (start+1); index < end; ++index)
+  {
+    root_node = _helperCreateBST(root_node, a[index]);
+  }
+
+  return root_node;
 }
+
+treeNode * _helperCreateBST(treeNode *root, int value)
+{
+  if (root == NULL)
+  {
+    return (_helperNode(root, value));
+  }
+
+  //Traversing tree
+  if(value < root->value)
+  {
+    root->leftChild = _helperCreateBST(root->leftChild, value);
+  }
+
+  if(value > root->value)
+  {
+    root->rightChild = _helperCreateBST(root->rightChild, value);
+  }
+
+  return root;
+}
+
+treeNode * _helperNode(treeNode *tn, int value)
+{
+  tn = malloc(sizeof(treeNode));
+  tn->value = value;
+  tn ->leftChild = NULL;
+  tn->rightChild = NULL;
+
+  return tn;
+}
+
+void _helperDestroy(treeNode *tn)
+{
+  //Terminating Condition
+  if (tn == NULL)
+  {
+    return;
+  }
+  _helperDestroy(tn->leftChild);
+  _helperDestroy(tn->rightChild);
+  free(tn);
+  return;
+}
+
 #endif
