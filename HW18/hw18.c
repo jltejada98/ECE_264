@@ -60,14 +60,14 @@ YOU CAN EDIT BELOW THIS COMMENT
 void FindMin(ListNode* head)
 {
 	// find pair of ListNodes with least distance between them.
-  
+
 	// call print Function
 
-	/*
-	ENSURE the 2nd parameter of the print function (min1) is smaller than
-	the 3rd parameter (min2). 
-	Look at README, and expected output for more details.
-	*/
+	
+	// ENSURE the 2nd parameter of the print function (min1) is smaller than
+	// the 3rd parameter (min2). 
+	// Look at README, and expected output for more details.
+	
 
 }
 #endif
@@ -76,8 +76,9 @@ void FindMin(ListNode* head)
 #ifdef TEST_DIST
 int FindDist(TreeNode* x, TreeNode* y)
 {
-	//find the eucledian distance between
+	//Determine Dimensionality of Data
 
+  //find the euclidean distance between
 	// x->data and y->data
 
 	// DO NOT FIND SQUARE ROOT (we are working with int)
