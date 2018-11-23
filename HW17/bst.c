@@ -75,13 +75,11 @@ int FindDistance(treeNode* t, int search_query, int distance)
   {
     return distance;
   }
-
-  if (search_query < (t->value))
+  else if (search_query < (t->value))
   {
     distance = FindDistance(t->leftChild, search_query, (distance + 1));
   }
-
-  if (search_query > (t->value))
+  else if (search_query > (t->value))
   {
     distance = FindDistance(t->rightChild, search_query, (distance + 1));
   }

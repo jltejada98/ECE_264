@@ -1,22 +1,74 @@
-WARNING = -Wall -Wshadow --pedantic
-ERROR = -Wvla -Werror
-GCC = gcc -std=c99 -g $(WARNING) $(ERROR) 
-
-TESTFLAGS = -DTEST_MAIN -DTEST_FUSE -DTEST_CENT -DTEST_DIST -DTEST_LINKEDLISTCREATE -DTEST_CREATENODE
+TARGET = hw18
+CFLAGS = -g -std=c99 -Wall -Wshadow -Wvla -Werror -pedantic
+GCC = gcc $(CFLAGS)
 
 SRCS = main.c hw18.c
+
 OBJS = $(SRCS:%.c=%.o)
+VALGRIND = valgrind --tool=memcheck --verbose --log-file
 
-hw18: $(OBJS) 
-	$(GCC) $(TESTFLAGS) $(OBJS) -o hw18
+TESTFLAGS = -DTEST_MAIN -DTEST_CREATENODE -DTEST_LINKEDLISTCREATE -DTEST_DIST -DTEST_MIN
 
-.c.o: 
-	$(GCC) $(TESTFLAGS) -c $*.c 
+$(TARGET): $(OBJS)
+	$(GCC) $(TESTFLAGS) $(OBJS) -o $(TARGET)
 
+.c.o:
+	$(GCC) $(TESTFLAGS) -c $*.c
 
-#test1 -> 5 2 inputs/test1.txt
+testmemory: $(TARGET)
+	$(VALGRIND)=./valgrind1.log ./$(TARGET) inputs/test1.txt > output1
+	$(VALGRIND)=./valgrind2.log ./$(TARGET) inputs/test2.txt > output2
+	$(VALGRIND)=./valgrind3.log ./$(TARGET) inputs/test3.txt > output3
+	$(VALGRIND)=./valgrind4.log ./$(TARGET) inputs/test4.txt > output4
+	$(VALGRIND)=./valgrind5.log ./$(TARGET) inputs/test5.txt > output5
+	$(VALGRIND)=./valgrind6.log ./$(TARGET) inputs/test6.txt > output6
+	$(VALGRIND)=./valgrind7.log ./$(TARGET) inputs/test7.txt > output7
+	$(VALGRIND)=./valgrind8.log ./$(TARGET) inputs/test8.txt > output8
+	$(VALGRIND)=./valgrind9.log ./$(TARGET) inputs/test9.txt > output9
+	$(VALGRIND)=./valgrind10.log ./$(TARGET) inputs/test10.txt > output10
 
-#test2 -> 33 3 inputs/test2.txt
+#Added rule to test all files.
+testall: test1 test2 test3 test4 test5 test6 test7 test8 test9 test10
 
-clean: # remove all machine generated files
-	rm -f split *.o output* hw18
+test1: $(TARGET)
+	./$(TARGET) inputs/test1.txt > output1
+	diff output1 expected/expected1.txt
+
+test2: $(TARGET)
+	./$(TARGET) inputs/test2.txt  > output2
+	diff output2 expected/expected2.txt
+
+test3: $(TARGET)
+	./$(TARGET) inputs/test3.txt > output3
+	diff output3 expected/expected3.txt
+
+test4: $(TARGET)
+	./$(TARGET) inputs/test4.txt > output4
+	diff output4 expected/expected4.txt
+
+test5: $(TARGET)
+	./$(TARGET) inputs/test5.txt > output5
+	diff output5 expected/expected5.txt
+
+test6: $(TARGET)
+	./$(TARGET) inputs/test6.txt > output6
+	diff output6 expected/expected6.txt
+
+test7: $(TARGET)
+	./$(TARGET) inputs/test7.txt > output7
+	diff output7 expected/expected7.txt
+
+test8: $(TARGET)
+	./$(TARGET) inputs/test8.txt > output8
+	diff output8 expected/expected8.txt
+
+test9: $(TARGET)
+	./$(TARGET) inputs/test9.txt > output9
+	diff output9 expected/expected9.txt
+
+test10: $(TARGET)
+	./$(TARGET) inputs/test10.txt > output10
+	diff output10 expected/expected10.txt
+
+clean:
+	rm -f $(OBJS) $(TARGET) valgrind?.log output?

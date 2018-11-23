@@ -60,6 +60,7 @@ YOU CAN EDIT BELOW THIS COMMENT
 void FindMin(ListNode* head)
 {
 	// find pair of ListNodes with least distance between them.
+  
 	// call print Function
 
 	/*
@@ -76,8 +77,11 @@ void FindMin(ListNode* head)
 int FindDist(TreeNode* x, TreeNode* y)
 {
 	//find the eucledian distance between
+
 	// x->data and y->data
+
 	// DO NOT FIND SQUARE ROOT (we are working with int)
+
 	// return the distance
 }
 #endif
@@ -86,12 +90,41 @@ int FindDist(TreeNode* x, TreeNode* y)
 #ifdef TEST_CREATENODE
 ListNode* CreateNode(int n, int dim, int* arr)
 {
-	// check for malloc error
+	//New Node Initialization
+  ListNode *new_node = NULL;
+  new_node = malloc(sizeof(ListNode));
+
+  // check for malloc error
+  if (new_node == NULL)
+  {
+    return NULL;
+  }
+
+  //Tree Node Initialization
+  new_node->treenode = malloc(sizeof(TreeNode));
+
+  //Check for Malloc Error
+  if (new_node->treenode == NULL)
+  {
+    return NULL;
+  }
 
 	// initialize dim
+  new_node->treenode->dimension = dim;
+
 	// both left and right childern will be NULL
+  new_node->treenode->left = NULL;
+  new_node->treenode->right = NULL;
+
 	// allocate memory for data
+  new_node->treenode->data =  malloc(sizeof(int) * dim);
+  new_node->treenode->data = arr;
+
+  //Set next to NULL;
+  new_node->next = NULL;
+
 	// return a ListNode
+  return new_node;
 }
 #endif
 
@@ -99,10 +132,54 @@ ListNode* CreateNode(int n, int dim, int* arr)
 #ifdef TEST_LINKEDLISTCREATE
 void LinkedListCreate(ListNode ** head, int n, int dim, FILE* fptr)
 {
-	// create temp node using CreateNode
-	// read from file into an array, pass array to CreateNode
-	// assign temp to that node
+	//Create Array.
+  int *arr = malloc(sizeof(int)*dim);
 
-	// use a loop to create nodes for the remaining elements of the list.
+  //Check for malloc failure.
+  if (arr == NULL)
+  {
+    return;
+  }
+
+  //Seeks Current Position of File Stream (Third Element)
+  fseek(fptr, 0, SEEK_CUR);
+
+  //Initialize Array (First Row of Elements)
+  for (int i = 0; i < dim; ++i)
+  {
+    fscanf(fptr, "%d", &arr[i]);
+  }
+
+  // read from file into an array, pass array to CreateNode
+  // create temp node using CreateNode
+  ListNode *temp_node = CreateNode(n, dim, arr);
+  // assign temp to that node
+  *head = temp_node;
+
+  // use a loop to create nodes for the remaining elements of the list.
+  for (int node_num = 1; node_num < n; ++node_num)
+  {
+    //Initialize array to be next row of elements (Works because file stream head is on next row of elements)
+    for (int i = 0; i < dim; ++i)
+    {
+      fscanf(fptr, "%d", &arr[i]);
+    }
+
+    //Modified from HW12
+    while((temp_node->next) != NULL)
+    {
+      temp_node = temp_node->next;
+    }
+
+    temp_node->next = CreateNode(n, dim, arr); //Create the Next Node (Index > 0)
+  }
+
+  //Free Memory for Array.
+  free(arr);
+
+  //Close File Pointer
+  fclose(fptr);
+
+  return;
 }
 #endif
