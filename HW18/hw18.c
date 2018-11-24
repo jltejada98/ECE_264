@@ -60,15 +60,49 @@ YOU CAN EDIT BELOW THIS COMMENT
 void FindMin(ListNode* head)
 {
 	// find pair of ListNodes with least distance between them.
+  ListNode *temp1 = head;
+  ListNode *temp2 = temp1->next;
+  ListNode *min1 = NULL;
+  ListNode *min2 = NULL;
+
+  //Determine First Distance Between temp's
+  int current_dist =  FindDist(temp1->treenode, temp2->treenode);
+  int min_dist = current_dist;
+
+  while(temp1->next != NULL)
+  {
+    while(temp2->next != NULL)
+    {
+      current_dist = FindDist(temp1->treenode, temp2->treenode);
+      
+      if (current_dist <= min_dist)
+      {
+        min_dist = current_dist;
+        min1 = temp1;
+        min2 = temp2;
+      }
+
+      temp2 = temp2->next;
+    }
+    temp1 = temp1->next;
+  }
+
 
 	// call print Function
-
-	
 	// ENSURE the 2nd parameter of the print function (min1) is smaller than
 	// the 3rd parameter (min2). 
 	// Look at README, and expected output for more details.
-	
+  if (min1->treenode->data[2] < min2->treenode->data[3])
+  {
+    PrintAnswer(head,min1,min2);
+  }
+  else
+  {
+    PrintAnswer(head,min2,min1);
+  }
 
+
+  return;
 }
 #endif
 
@@ -76,14 +110,23 @@ void FindMin(ListNode* head)
 #ifdef TEST_DIST
 int FindDist(TreeNode* x, TreeNode* y)
 {
-	//Determine Dimensionality of Data
-
-  //find the euclidean distance between
-	// x->data and y->data
-
+  //Find the euclidean distance between x->data and y->data
 	// DO NOT FIND SQUARE ROOT (we are working with int)
 
+  //Modified from HW04
+  int sum = 0;
+  int difference = 0;
+  int treenode_dimension = x->dimension;
+
+  //Iterates through all dimensions of 
+  for (int i = 0; i < treenode_dimension; ++i)
+  {
+    difference = x->data[i] - y->data[i];
+    sum = sum + difference * difference;
+  }
+
 	// return the distance
+  return sum;
 }
 #endif
 
@@ -143,7 +186,7 @@ void LinkedListCreate(ListNode ** head, int n, int dim, FILE* fptr)
   }
 
   //Seeks Current Position of File Stream (Third Element)
-  fseek(fptr, 0, SEEK_CUR);
+  fseek(fptr, 0, SEEK_CUR + 2);
 
   //Initialize Array (First Row of Elements)
   for (int i = 0; i < dim; ++i)
