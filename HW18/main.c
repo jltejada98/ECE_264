@@ -74,11 +74,26 @@ int main(int argc, char * * argv)
 	// call LinkedListCreate
   LinkedListCreate(&list_head, number_elements, number_dimensions, fptr);
 
+  //Testing proper creation of linked list
+  ListNode *temp_head = list_head;
+  int i = 0;
+  while(temp_head != NULL)
+  {
+    while(i < temp_head->treenode->dimension)
+    {
+      printf("%d ",temp_head->treenode->data[i]);
+      ++i;
+    }
+    printf("\n");
+    i = 0;
+    temp_head = temp_head->next;
+  }
+
 	// call FindMin
-  FindMin(list_head);
+  //FindMin(list_head);
 
   //Remember to free memory.
-  _helper_Destroy_LinkedList(list_head);
+  //_helper_Destroy_LinkedList(list_head);
 
 }
 #endif
