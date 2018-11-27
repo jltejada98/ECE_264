@@ -238,9 +238,6 @@ void LinkedListCreate(ListNode ** head, int n, int dim, FILE* fptr)
   //Free Memory for Array.
   free(arr);
 
-  //Close File Pointer
-  fclose(fptr);
-
   return;
 }
 #endif
