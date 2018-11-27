@@ -69,9 +69,9 @@ void FindMin(ListNode* head)
   int current_dist =  FindDist(temp1->treenode, temp2->treenode);
   int min_dist = current_dist;
 
-  while(temp1->next != NULL)
+  while(temp1 != NULL)
   {
-    while(temp2->next != NULL)
+    while(temp2 != NULL)
     {
       current_dist = FindDist(temp1->treenode, temp2->treenode);
       
@@ -84,7 +84,12 @@ void FindMin(ListNode* head)
 
       temp2 = temp2->next;
     }
-    temp1 = temp1->next;
+    temp1 = temp1->next; //Continue to Analyze Next Element.
+   
+    if (temp1 != NULL) //Compare to following element.
+    {
+      temp2 = temp1->next;
+    }
   }
 
 
@@ -92,15 +97,21 @@ void FindMin(ListNode* head)
 	// ENSURE the 2nd parameter of the print function (min1) is smaller than
 	// the 3rd parameter (min2). 
 	// Look at README, and expected output for more details.
-  if (min1->treenode->data[2] < min2->treenode->data[3])
+  int i = 0;
+  while(i < min1->treenode->dimension) 
   {
-    PrintAnswer(head,min1,min2);
+    if (min1->treenode->data[i] < min2->treenode->data[i])
+    {
+      PrintAnswer(head,min1,min2);
+      i = min1->treenode->dimension;
+    }
+    else if (min2->treenode->data[i] < min1->treenode->data[i])
+    {
+      PrintAnswer(head,min2,min1);
+      i = min1->treenode->dimension;
+    }
+    ++i;
   }
-  else
-  {
-    PrintAnswer(head,min2,min1);
-  }
-
 
   return;
 }
