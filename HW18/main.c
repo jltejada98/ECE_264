@@ -20,10 +20,7 @@ void _helper_Destroy_LinkedList (ListNode *head_node)
   while(head_node != NULL)
   {
     temp_node = head_node->next;
-    if (temp_node != NULL)
-    {
-      _helper_Destroy_Tree(temp_node->treenode);
-    }
+    _helper_Destroy_Tree(head_node->treenode);
     free(head_node);
     head_node = temp_node;
   }
@@ -42,6 +39,7 @@ void _helper_Destroy_Tree(TreeNode *tn)
   _helper_Destroy_Tree(tn->right);
   free(tn->data);
   free(tn);
+
   return;
 }
 

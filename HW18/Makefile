@@ -71,4 +71,4 @@ test10: $(TARGET)
 	diff output10 expected/expected10.txt
 
 clean:
-	rm -f $(OBJS) $(TARGET) valgrind?.log output?
+	rm -f $(OBJS) $(TARGET) valgrind?.log valgrind1?.log output? output1?
