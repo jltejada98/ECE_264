@@ -63,7 +63,24 @@ ListNode* FindCentroid(TreeNode* x, TreeNode* y)
 #ifdef TEST_DIST
 int FindDist(TreeNode* x, TreeNode* y)
 {
-	//Same as previous HW
+	//Extracted from HW18
+  //Find the euclidean distance between x->data and y->data
+  // DO NOT FIND SQUARE ROOT (we are working with int)
+
+  //Modified from HW04
+  int sum = 0;
+  int difference = 0;
+  int treenode_dimension = x->dimension;
+
+  //Iterates through all dimensions of 
+  for (int i = 0; i < treenode_dimension; ++i)
+  {
+    difference = x->data[i] - y->data[i];
+    sum = sum + difference * difference;
+  }
+
+  // return the distance
+  return sum;
 }
 #endif
 
@@ -84,7 +101,47 @@ ListNode* Fuse(ListNode* head, ListNode* fuse1, ListNode* fuse2)
 #ifdef TEST_CREATENODE
 ListNode* CreateNode(int n, int dim, int* arr)
 {
-	// Same as previous HW
+  //Extracted from HW18
+  //New Node Initialization
+  ListNode *new_node = NULL;
+  new_node = malloc(sizeof(ListNode));
+
+  // check for malloc error
+  if (new_node == NULL)
+  {
+    return NULL;
+  }
+
+  //Tree Node Initialization
+  new_node->treenode = malloc(sizeof(TreeNode));
+
+  //Check for Malloc Error
+  if (new_node->treenode == NULL)
+  {
+    return NULL;
+  }
+
+  // initialize dim
+  new_node->treenode->dimension = dim;
+
+  // both left and right childern will be NULL
+  new_node->treenode->left = NULL;
+  new_node->treenode->right = NULL;
+
+  // allocate memory for data
+  new_node->treenode->data =  malloc(sizeof(int) * dim);
+  
+  //Set each element individually.
+  for (int i = 0; i < dim; ++i)
+  {
+    new_node->treenode->data[i] = arr[i];
+  }
+
+  //Set next to NULL;
+  new_node->next = NULL;
+
+  // return a ListNode
+  return new_node;
 }
 #endif
 
@@ -92,18 +149,118 @@ ListNode* CreateNode(int n, int dim, int* arr)
 #ifdef TEST_LINKEDLISTCREATE
 void LinkedListCreate(ListNode ** head, int n, int dim, FILE* fptr)
 {
-	// Same as previous HW
+  //Extracted from HW18
+  //Create Array.
+  int *arr = malloc(sizeof(int)*dim);
+
+  //Check for malloc failure.
+  if (arr == NULL)
+  {
+    return;
+  }
+
+  //Seeks Current Position of File Stream (Third Element)
+  fseek(fptr, 0, SEEK_CUR + 2);
+
+  //Initialize Array (First Row of Elements)
+  for (int i = 0; i < dim; ++i)
+  {
+    fscanf(fptr, "%d", &arr[i]);
+  }
+
+  // read from file into an array, pass array to CreateNode
+  // create temp node using CreateNode
+  ListNode *temp_node = CreateNode(n, dim, arr);
+  // assign temp to that node
+  *head = temp_node;
+
+  // use a loop to create nodes for the remaining elements of the list.
+  for (int node_num = 1; node_num < n; ++node_num)
+  {
+    //Initialize array to be next row of elements (Works because file stream head is on next row of elements)
+    for (int i = 0; i < dim; ++i)
+    {
+      fscanf(fptr, "%d", &arr[i]);
+    }
+
+    //Modified from HW12
+    while((temp_node->next) != NULL)
+    {
+      temp_node = temp_node->next;
+    }
+
+    temp_node->next = CreateNode(n, dim, arr); //Create the Next Node (Index > 0)
+  }
+
+  //Free Memory for Array.
+  free(arr);
+
+  return;
 }
 #endif
 
 #ifdef TEST_CLUSTER
 void MakeCluster(ListNode** head)
 {
-	// Walk through the linked list.
-	// find pair of nodes with minimum distance.
+  //Determine Number of Nodes
+  ListNode *temp1 = head;
+  ListNode *temp2 = temp1->next;
+  ListNode *min1 = NULL;
+  ListNode *min2 = NULL;
+  int number_nodes = 0;
+
+
+
+  //Extracted from HW18
+
+  //Determine First Distance Between temp's
+  int current_dist =  FindDist(temp1->treenode, temp2->treenode);
+  int min_dist = current_dist;
+
+  while(temp1 != NULL)// Walk through the linked list.
+  {
+    while(temp2 != NULL)
+    {
+      current_dist = FindDist(temp1->treenode, temp2->treenode); // find pair of nodes with minimum distance.
+      
+      if (current_dist <= min_dist)
+      {
+        min_dist = current_dist;
+        min1 = temp1;
+        min2 = temp2;
+      }
+
+      temp2 = temp2->next;
+    }
+    temp1 = temp1->next; //Continue to Analyze Next Element.
+   
+    if (temp1 != NULL) //Compare to following element.
+    {
+      temp2 = temp1->next;
+    }
+  }
 	// fuse the two nodes into one node.
+
 	// call print function
+  int i = 0;
+  while(i < min1->treenode->dimension) 
+  {
+    if (min1->treenode->data[i] < min2->treenode->data[i])
+    {
+      PrintAnswer(head,min1,min2);
+      i = min1->treenode->dimension;
+    }
+    else if (min2->treenode->data[i] < min1->treenode->data[i])
+    {
+      PrintAnswer(head,min2,min1);
+      i = min1->treenode->dimension;
+    }
+    ++i;
+  }
+
 	// repeat till one node is remaining.
+
+  return;
 }
 #endif
 
