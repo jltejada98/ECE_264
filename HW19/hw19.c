@@ -131,7 +131,7 @@ int _helper_Equal_Nodes(ListNode *node1, ListNode *node2)
     ++index;
   }
 
-  if (node1->treenode->data[index] != node2->treenode->data[index])
+  if ((index < number_dimensions) && (node1->treenode->data[index] != node2->treenode->data[index]))
   {
     equal = 0;
   }
