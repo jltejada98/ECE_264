@@ -194,6 +194,12 @@ ListNode* CreateNode(int n, int dim, int* arr)
 
   // allocate memory for data
   new_node->treenode->data =  malloc(sizeof(int) * dim);
+
+  //Check for Malloc Error
+  if (new_node->treenode->data == NULL)
+  {
+    return NULL;
+  }
   
   //Set each element individually.
   for (int i = 0; i < dim; ++i)
