@@ -42,20 +42,31 @@ MODIFY BELOW THIS COMMENT
 #ifdef TEST_CENT
 ListNode* FindCentroid(TreeNode* x, TreeNode* y)
 {
-	// Create a new node
-	// new -> treenode.left should be x
-	// new -> treenode.right should be y
-	// x -> treenode.data should be less than y -> treenode.data (refer to README)
-	
 	// Use a loop to average the data from the two parameters (x and y).
-	/*
-	EXAMPLE
-	Average x->treenode.data[0] and y->treenode.data[0] to new->treenode.data[0]
-	Average x->treenode.data[1] and y->treenode.data[1] to new->treenode.data[1]
-	and so on
-	*/
+	// EXAMPLE
+	// Average x->treenode.data[0] and y->treenode.data[0] to new->treenode.data[0]
+	// Average x->treenode.data[1] and y->treenode.data[1] to new->treenode.data[1]
+	// and so on
+	int number_dimensions = x->dimension;
+  int *average_array = malloc(sizeof(int) * number_dimensions);
+
+  for (int i = 0; i < number_dimensions; ++i)
+  {
+    average_array[i] = (x->data[i] + y->data[i]) / 2;
+  }
+
+  // Create a new node
+  // new -> treenode.left should be x
+  // new -> treenode.right should be y
+  // x -> treenode.data should be less than y -> treenode.data (refer to README)
+  // new -> treenode.data = averaged data.
+
+  ListNode *new_node = CreateNode(0, number_dimensions, average_array);
+  new_node->treenode->left = x;
+  new_node->treenode->right = y;
 
 	// Return the new node
+  return new_node;
 }
 #endif
 
@@ -86,14 +97,67 @@ int FindDist(TreeNode* x, TreeNode* y)
 
 
 #ifdef TEST_FUSE
+//Helper Function Declarations and Definitions
+ListNode * _helper_Search_Unlink_Node(ListNode *search, ListNode *head);
+int _helper_Equal_Nodes(ListNode *node1, ListNode *node2);
+
+ListNode * _helper_Search_Unlink_Node(ListNode *search, ListNode *head)
+{
+  //Searches for the first node within the list.
+  ListNode *temp_previous = head;
+  ListNode *temp_current = temp_previous->next;
+
+  //Search for fuse1, fuse2, unlink from list.
+  while((temp_current != NULL) && !(_helper_Equal_Nodes(temp_current, search)))
+  {
+    temp_previous = temp_previous->next;
+    temp_current = temp_current->next;
+  }
+  
+  //Unlinking node, does not free.
+  temp_previous->next = temp_current->next;
+
+  return(head);
+}
+
+int _helper_Equal_Nodes(ListNode *node1, ListNode *node2)
+{
+  int equal = 1;
+  int number_dimensions = node1->treenode->dimension;
+  int index = 0;
+
+  while((index < number_dimensions) && (node1->treenode->data[index] == node2->treenode->data[index]))
+  {
+    ++index;
+  }
+
+  if (node1->treenode->data[index] != node2->treenode->data[index])
+  {
+    equal = 0;
+  }
+
+  return equal;
+}
+
+
 ListNode* Fuse(ListNode* head, ListNode* fuse1, ListNode* fuse2)
 {
-
 	// Create a new ListNode element using findCentroid function.
-	// The new->treenode.data will hold the averaged values of the two parameters' data (fuse1, and fuse2)
-	// add the new ListNode to the list.
+  // The new->treenode.data will hold the averaged values of the two parameters' data (fuse1, and fuse2)
+  ListNode *new_node = FindCentroid(fuse1->treenode, fuse2->treenode);
+  
+  // Add the new ListNode to the list.
+  //ListNode *temp_head = head; //Stores the head Before Changing.
+  //Decided to insert centroid node at Begging
+  new_node->next = head;
+  head = new_node;
+
 	// remove the fuse1 and fuse2 from the list. (Do NOT free)
-	// you may want to return head from this function (depending on your implementation)
+  // Unlink fuse1 and fuse 2 from the list. 
+  head = _helper_Search_Unlink_Node(fuse1, head);
+  head = _helper_Search_Unlink_Node(fuse2, head);
+
+  return head; // you may want to return head from this function (depending on your implementation)
 }
 #endif
 
@@ -200,68 +264,90 @@ void LinkedListCreate(ListNode ** head, int n, int dim, FILE* fptr)
 #endif
 
 #ifdef TEST_CLUSTER
+
 void MakeCluster(ListNode** head)
 {
-  //Determine Number of Nodes
-  ListNode *temp1 = head;
+  //Variables
+  ListNode *temp1 = *head;
   ListNode *temp2 = temp1->next;
   ListNode *min1 = NULL;
   ListNode *min2 = NULL;
-  int number_nodes = 0;
 
-
-
-  //Extracted from HW18
-
-  //Determine First Distance Between temp's
-  int current_dist =  FindDist(temp1->treenode, temp2->treenode);
-  int min_dist = current_dist;
-
-  while(temp1 != NULL)// Walk through the linked list.
+  //Determining Number of Nodes
+  int number_nodes = 1;
+  while(temp1->next != NULL)
   {
-    while(temp2 != NULL)
+    temp1 = temp1->next;
+    ++number_nodes;
+  }
+
+  temp1 = *head;
+
+  int number_remaining = number_nodes;
+
+  while(number_remaining > 1) // repeat till one node is remaining.
+  {
+    //Modified from HW18
+    //Re assign values to prevent segmentation fault.
+    temp1 = *head;
+    temp2 = temp1->next;
+    //Determine First Distance Between temp's
+
+    int current_dist =  FindDist(temp1->treenode, temp2->treenode);
+    int min_dist = current_dist;
+
+    while(temp1 != NULL)// Walk through the linked list.
     {
-      current_dist = FindDist(temp1->treenode, temp2->treenode); // find pair of nodes with minimum distance.
-      
-      if (current_dist <= min_dist)
+      while(temp2 != NULL)
       {
-        min_dist = current_dist;
-        min1 = temp1;
-        min2 = temp2;
+        current_dist = FindDist(temp1->treenode, temp2->treenode); // find pair of nodes with minimum distance.
+        
+        if (current_dist <= min_dist)
+        {
+          min_dist = current_dist;
+          min1 = temp1;
+          min2 = temp2;
+        }
+
+        temp2 = temp2->next;
       }
+      temp1 = temp1->next; //Continue to Analyze Next Element.
+     
+      if (temp1 != NULL) //Compare to following element.
+      {
+        temp2 = temp1->next;
+      }
+    }
 
-      temp2 = temp2->next;
-    }
-    temp1 = temp1->next; //Continue to Analyze Next Element.
-   
-    if (temp1 != NULL) //Compare to following element.
+    // call print function
+    int i = 0;
+    while(i < min1->treenode->dimension) //Ensures second parameter is smaller than third parameter.
     {
-      temp2 = temp1->next;
+      if (min1->treenode->data[i] < min2->treenode->data[i])
+      {
+        PrintAns(*head,min1,min2);
+        *head = Fuse(*head, min1, min2); // fuse the two nodes into one node.
+        --number_remaining;
+        i = min1->treenode->dimension;
+      }
+      else if (min2->treenode->data[i] < min1->treenode->data[i])
+      {
+        PrintAns(*head,min2,min1);
+        *head = Fuse(*head, min2, min1); // fuse the two nodes into one node.
+        --number_remaining;
+        i = min1->treenode->dimension;
+      }
+      ++i;
     }
-  }
-	// fuse the two nodes into one node.
-
-	// call print function
-  int i = 0;
-  while(i < min1->treenode->dimension) 
-  {
-    if (min1->treenode->data[i] < min2->treenode->data[i])
-    {
-      PrintAnswer(head,min1,min2);
-      i = min1->treenode->dimension;
-    }
-    else if (min2->treenode->data[i] < min1->treenode->data[i])
-    {
-      PrintAnswer(head,min2,min1);
-      i = min1->treenode->dimension;
-    }
-    ++i;
-  }
-
-	// repeat till one node is remaining.
+    //Free min1/min2
+    free(min1);
+    free(min2);
+  
+  } //End of repeat till one node remaining.
 
   return;
 }
+
 #endif
 
 

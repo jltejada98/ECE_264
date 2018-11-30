@@ -8,7 +8,8 @@
 
 
 #ifdef TEST_MAIN
-//Function Declarations
+
+//Helper Function Declarations and Definitions
 void _helper_Destroy_Tree(TreeNode *tn);
 void _helper_Destroy_LinkedList (ListNode *head_node);
 
@@ -43,6 +44,7 @@ void _helper_Destroy_Tree(TreeNode *tn)
   return;
 }
 
+//End of Helper Functions Section.
 
 int main(int argc, char * * argv)
 {
@@ -74,12 +76,12 @@ int main(int argc, char * * argv)
 	// Create linkedList
   LinkedListCreate(&list_head, number_elements, number_dimensions, fptr);
 	
-  ListNode *FindMin_list_head = list_head;
+  ListNode *FindMin_list_head = list_head; //Consider Deleting and making argument list_head.
 	// call MakeCluster
-  MakeCluster(FindMin_list_head);
+  MakeCluster(&FindMin_list_head);
 
   //Remember to free memory.
-  _helper_Destroy_LinkedList(list_head);
+  _helper_Destroy_LinkedList(FindMin_list_head);
   //Close File Pointer
   fclose(fptr);
 }
