@@ -65,6 +65,8 @@ ListNode* FindCentroid(TreeNode* x, TreeNode* y)
   new_node->treenode->left = x;
   new_node->treenode->right = y;
 
+  free(average_array);
+
 	// Return the new node
   return new_node;
 }
